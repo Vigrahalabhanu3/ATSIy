@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ThemeInitializer from "@/components/theme/ThemeInitializer";
 import DesktopOnlyGuard from "@/components/layout/DesktopOnlyGuard";
+import CookieConsentModal from "@/components/auth/CookieConsentModal";
+import SessionManager from "@/components/auth/SessionManager";
 
 const siteUrl = process.env.APP_URL || "https://atsly.app";
 
@@ -91,6 +93,8 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased transition-colors duration-200 bg-[#F8F9FE] dark:bg-[#0B0D1B] text-[#111827] dark:text-[#F1F5F9] min-h-screen">
         <ThemeInitializer />
+        <SessionManager />
+        <CookieConsentModal />
         <DesktopOnlyGuard>
           {children}
         </DesktopOnlyGuard>

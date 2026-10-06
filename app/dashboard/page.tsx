@@ -23,6 +23,7 @@ import {
 import { StatsGridSkeleton, TableSkeleton } from "@/components/ui/Skeleton";
 import { CreditBalanceResponse, CreditTransactionItem } from "@/types/credits";
 import { getCredits, getCreditHistory } from "@/lib/api/credits";
+import { apiFetch } from "@/lib/api/client";
 
 interface RecentAnalysis {
   id: string;
@@ -62,9 +63,9 @@ export default function DashboardPage() {
     try {
       setLoading(true);
       const [meRes, statsRes, recentRes, creditsData, historyData] = await Promise.all([
-        fetch("/api/auth/me"),
-        fetch("/api/dashboard/stats"),
-        fetch("/api/dashboard/recent"),
+        apiFetch("/api/auth/me"),
+        apiFetch("/api/dashboard/stats"),
+        apiFetch("/api/dashboard/recent"),
         getCredits().catch(() => null),
         getCreditHistory(1, 5).catch(() => ({ transactions: [] })),
       ]);

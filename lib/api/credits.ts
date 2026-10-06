@@ -1,8 +1,9 @@
 import { CreditBalanceResponse, CreditHistoryResponse } from "@/types/credits";
 import { PlanConfigMap } from "@/lib/config/plans";
+import { apiFetch } from "./client";
 
 export async function getCredits(): Promise<CreditBalanceResponse> {
-  const res = await fetch("/api/credits", {
+  const res = await apiFetch("/api/credits", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -20,7 +21,7 @@ export async function getCredits(): Promise<CreditBalanceResponse> {
 }
 
 export async function getCreditHistory(page: number = 1, limit: number = 20): Promise<CreditHistoryResponse> {
-  const res = await fetch(`/api/credits/history?page=${page}&limit=${limit}`, {
+  const res = await apiFetch(`/api/credits/history?page=${page}&limit=${limit}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +39,7 @@ export async function getCreditHistory(page: number = 1, limit: number = 20): Pr
 }
 
 export async function getPlans(): Promise<{ plans: PlanConfigMap }> {
-  const res = await fetch("/api/credits/plans", {
+  const res = await apiFetch("/api/credits/plans", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -107,17 +107,27 @@ export default function SignUpPage({
           return;
         }
 
+        const token = data.data?.token || data.token;
+        const userObj = data.data?.user || data.user;
+
         if (typeof window !== "undefined") {
+          if (token) {
+            localStorage.setItem("atsly_token", token);
+          }
           localStorage.setItem(
             "atsly_user",
             JSON.stringify({
-              id: data.data?.user?.id,
-              name: data.data?.user?.name || fullName,
-              email: data.data?.user?.email || email,
+              id: userObj?.id,
+              name: userObj?.name || fullName,
+              email: userObj?.email || email,
               role: role,
               isLoggedIn: true,
             })
           );
+          // Ask for cookie acceptance after initial register
+          if (!localStorage.getItem("atsly_cookie_consent")) {
+            localStorage.setItem("atsly_ask_cookie_consent", "true");
+          }
         }
 
         router.push("/dashboard");
@@ -139,17 +149,27 @@ export default function SignUpPage({
           return;
         }
 
+        const token = data.data?.token || data.token;
+        const userObj = data.data?.user || data.user;
+
         if (typeof window !== "undefined") {
+          if (token) {
+            localStorage.setItem("atsly_token", token);
+          }
           localStorage.setItem(
             "atsly_user",
             JSON.stringify({
-              id: data.data?.user?.id,
-              name: data.data?.user?.name,
-              email: data.data?.user?.email,
-              role: role,
+              id: userObj?.id,
+              name: userObj?.name,
+              email: userObj?.email,
+              role: userObj?.role || role,
               isLoggedIn: true,
             })
           );
+          // Ask for cookie acceptance after initial login if not already saved
+          if (!localStorage.getItem("atsly_cookie_consent")) {
+            localStorage.setItem("atsly_ask_cookie_consent", "true");
+          }
         }
 
         router.push("/dashboard");

@@ -12,14 +12,13 @@ const PROTECTED_PREFIXES = [
   "/reports",
   "/settings",
   "/results",
-  "/pricing",
 ];
 
 const AUTH_PAGES = ["/login", "/signup"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const token = req.cookies.get("atsly_token")?.value;
+  const token = req.cookies.get("atsly_token")?.value || req.cookies.get("atsly_session")?.value;
   const ip = getClientIp(req.headers);
 
   // 1. API Rate Limiting for sensitive endpoints
@@ -125,7 +124,6 @@ export const config = {
     "/reports/:path*",
     "/settings/:path*",
     "/results/:path*",
-    "/pricing/:path*",
     "/login",
     "/signup",
     "/api/auth/login",

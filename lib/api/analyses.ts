@@ -1,8 +1,10 @@
+import { apiFetch } from "./client";
+
 export async function createAnalysis(data: {
   resumeId: string;
   jobDescription: string;
 }) {
-  const res = await fetch("/api/analyses", {
+  const res = await apiFetch("/api/analyses", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -20,17 +22,17 @@ export async function fetchAnalyses(params?: {
   if (params?.limit) query.set("limit", params.limit.toString());
   if (params?.search) query.set("search", params.search);
 
-  const res = await fetch(`/api/analyses?${query.toString()}`);
+  const res = await apiFetch(`/api/analyses?${query.toString()}`);
   return res.json();
 }
 
 export async function fetchAnalysisById(id: string) {
-  const res = await fetch(`/api/analyses/${id}`);
+  const res = await apiFetch(`/api/analyses/${id}`);
   return res.json();
 }
 
 export async function deleteAnalysisById(id: string) {
-  const res = await fetch(`/api/analyses/${id}`, {
+  const res = await apiFetch(`/api/analyses/${id}`, {
     method: "DELETE",
   });
   return res.json();

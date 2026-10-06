@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/db/mongodb";
 import { UserModel } from "@/lib/db/models/User";
 import { hashPassword } from "@/lib/auth/password";
 import { signToken } from "@/lib/auth/jwt";
-import { createAuthCookieHeader } from "@/lib/auth/session";
+import { setAuthCookie } from "@/lib/auth/session";
 
 export async function POST(req: NextRequest) {
   try {
@@ -104,6 +104,7 @@ export async function POST(req: NextRequest) {
       {
         success: true,
         data: {
+          token,
           user: {
             id: user._id.toString(),
             name: user.name,
@@ -113,12 +114,13 @@ export async function POST(req: NextRequest) {
             createdAt: user.createdAt.toISOString(),
           },
         },
+        token,
       },
       { status: 201 }
     );
 
-    // Set HTTP-only cookie
-    response.headers.set("Set-Cookie", createAuthCookieHeader(token));
+    // Set HTTP-only cookie using response.cookies
+    setAuthCookie(response, token);
     return response;
   } catch (error: any) {
     console.error("Register API error:", error);

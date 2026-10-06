@@ -21,6 +21,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { TableSkeleton } from "@/components/ui/Skeleton";
+import { apiFetch } from "@/lib/api/client";
 
 interface RealReportItem {
   id: string;
@@ -50,8 +51,8 @@ export default function ReportsPage() {
     try {
       setLoading(true);
       const [reportsRes, statsRes] = await Promise.all([
-        fetch("/api/reports?limit=50"),
-        fetch("/api/dashboard/stats"),
+        apiFetch("/api/reports?limit=50"),
+        apiFetch("/api/dashboard/stats"),
       ]);
 
       if (reportsRes.status === 401) {

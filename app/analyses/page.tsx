@@ -18,6 +18,7 @@ import {
   TrashIcon,
 } from "@/components/icons/Icons";
 import { TableSkeleton } from "@/components/ui/Skeleton";
+import { apiFetch } from "@/lib/api/client";
 
 interface RealAnalysisItem {
   id: string;
@@ -49,8 +50,8 @@ export default function AnalysesPage() {
     try {
       setLoading(true);
       const [analysesRes, statsRes] = await Promise.all([
-        fetch("/api/analyses?limit=50"),
-        fetch("/api/dashboard/stats"),
+        apiFetch("/api/analyses?limit=50"),
+        apiFetch("/api/dashboard/stats"),
       ]);
 
       if (analysesRes.status === 401) {

@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/db/mongodb";
 import { UserModel } from "@/lib/db/models/User";
 import { comparePassword, hashPassword } from "@/lib/auth/password";
 import { signToken } from "@/lib/auth/jwt";
-import { createAuthCookieHeader } from "@/lib/auth/session";
+import { setAuthCookie } from "@/lib/auth/session";
 
 export async function POST(req: NextRequest) {
   try {
@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
     const response = NextResponse.json({
       success: true,
       data: {
+        token,
         user: {
           id: user._id.toString(),
           name: user.name,
@@ -66,9 +67,10 @@ export async function POST(req: NextRequest) {
           createdAt: user.createdAt.toISOString(),
         },
       },
+      token,
     });
 
-    response.headers.set("Set-Cookie", createAuthCookieHeader(token));
+    setAuthCookie(response, token);
     return response;
   } catch (error: any) {
     console.error("Login API error:", error);

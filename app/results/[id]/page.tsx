@@ -18,6 +18,7 @@ import { ATSResult } from "@/lib/types";
 import { RefreshIcon, DownloadIcon } from "@/components/icons/Icons";
 import { formatAnalysisToATSResult } from "@/lib/services/adapter";
 import { AnalysisDetailSkeleton } from "@/components/ui/Skeleton";
+import { apiFetch } from "@/lib/api/client";
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -43,7 +44,7 @@ export default function AnalysisDetailPage() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`/api/analyses/${analysisId}`);
+        const res = await apiFetch(`/api/analyses/${analysisId}`);
         const data = await res.json();
 
         if (!res.ok || !data.success) {

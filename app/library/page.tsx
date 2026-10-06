@@ -22,6 +22,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { ResumeCardsSkeleton } from "@/components/ui/Skeleton";
+import { apiFetch } from "@/lib/api/client";
 
 interface RealResumeItem {
   id: string;
@@ -70,7 +71,7 @@ export default function LibraryPage() {
   const fetchResumes = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/resumes?limit=50");
+      const res = await apiFetch("/api/resumes?limit=50");
       if (res.status === 401) {
         router.push("/login");
         return;
@@ -171,7 +172,7 @@ export default function LibraryPage() {
   // Real delete from Cloudinary + MongoDB
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/resumes/${id}`, {
+      const res = await apiFetch(`/api/resumes/${id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -221,7 +222,7 @@ export default function LibraryPage() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("/api/resumes", {
+      const res = await apiFetch("/api/resumes", {
         method: "POST",
         body: formData,
       });

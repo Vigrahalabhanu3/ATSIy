@@ -12,6 +12,7 @@ import { ATSResult } from "@/lib/types";
 import { formatAnalysisToATSResult } from "@/lib/services/adapter";
 import { CreditBalanceResponse } from "@/types/credits";
 import { getCredits } from "@/lib/api/credits";
+import { apiFetch } from "@/lib/api/client";
 import {
   Zap,
   ShieldCheck,
@@ -62,8 +63,8 @@ export default function AnalyzePage() {
       setLoadingCredits(true);
       const [creditsData, resumesRes, recentRes] = await Promise.all([
         getCredits().catch(() => null),
-        fetch("/api/resumes?limit=10"),
-        fetch("/api/dashboard/recent"),
+        apiFetch("/api/resumes?limit=10"),
+        apiFetch("/api/dashboard/recent"),
       ]);
 
       if (creditsData) {
@@ -80,7 +81,7 @@ export default function AnalyzePage() {
         const recentData = await recentRes.json();
         const recentList = recentData.data?.recent || recentData.recent || [];
         if (recentList.length > 0) {
-          const singleRes = await fetch(`/api/analyses/${recentList[0].id}`);
+          const singleRes = await apiFetch(`/api/analyses/${recentList[0].id}`);
           if (singleRes.ok) {
             const singleData = await singleRes.json();
             const fullDoc = singleData.data?.analysis || singleData.analysis;
@@ -161,7 +162,7 @@ export default function AnalyzePage() {
         const formData = new FormData();
         formData.append("file", uploadedFile.file);
 
-        const uploadRes = await fetch("/api/resumes", {
+        const uploadRes = await apiFetch("/api/resumes", {
           method: "POST",
           body: formData,
         });
@@ -184,7 +185,7 @@ export default function AnalyzePage() {
 
       // Step 3: Trigger real ATS analysis via backend pipeline
       setAnalysisStep("Analyzing resume against job description...");
-      const analysisRes = await fetch("/api/analyses", {
+      const analysisRes = await apiFetch("/api/analyses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
